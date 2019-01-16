@@ -19,7 +19,10 @@ DropDown.prototype.bindEvents = function(){
 DropDown.prototype.populate = function(instrumentData){
   instrumentData.forEach((instrument, index) => {
     const option = document.createElement('option');
+    option.textContent = family.name;
     option.value = index;
     this.element.appendChild(option);
   });
-}
+};
+
+module.exports = DropDown;

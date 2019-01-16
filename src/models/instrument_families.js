@@ -1,24 +1,21 @@
 const PubSub = require('../helpers/pub_sub.js')
 
-const InstrumentFamilies = function(data) {
+const InstrumentFamilies = function (data) {
   this.data = data;
 };
 
 InstrumentFamilies.prototype.bindEvents = function () {
-  PubSub.subscribe('SelectView:change', (evt) => {
-     const selectedIndex = evt.detail;
-     console.log(selectedIndex);
-     const instrumentResult = this.publishInstrumentDetail(selectedIndex);
-     console.log(instrumentResult);
-     PubSub.publish('instrument:selected-instrument-ready', instrumentResult);
-   });
+  PubSub.publish('InstrumentFamilies:data-ready', this.data);
+
+  PubSub.subscribe('DropDownView:change', (evt) => {
+    const selectedIndex = evt.detail;
+    this.publishFamilyDetail(selectedIndex);
+  });
 };
 
-
-InstrumentFamilies.prototype.getInstrument = function (index) {
-    return this.planets[index];
+InstrumentFamilies.prototype.publishFamilyDetail = function (selectedIndex) {
+  const selectedFamily = this.data[selectedIndex];
+  PubSub.publish('InstrumentFamilies:selected-family-ready', selectedFamily)
 };
-
-
 
 module.exports = InstrumentFamilies;
